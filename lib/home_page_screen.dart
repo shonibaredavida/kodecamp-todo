@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:todo/functions/functions.dart';
 import 'package:todo/widgets/constants.dart';
+import 'package:todo/widgets/dialog_widget.dart';
 import 'package:todo/widgets/home_card_widget.dart';
+import 'package:todo/widgets/task_enty_widget.dart';
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({
@@ -15,24 +18,50 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
+  List taskList = [];
+  final _newTaskName = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     String username = "David";
-    List taskList = [];
-    final newFormKey = GlobalKey<FormState>();
-    String formattedInputDate =
-        DateFormat('MMM d, HH:mm a').format(DateTime.now());
-    String newtaskName = "";
     String taskCat = "Diseño de Onboarding";
     String formattedDate = DateFormat.yMMMEd().format(DateTime.now());
-    int getNumOfCompletedTask(taskList) {
+
+    int getNumOfCompletedTask(List taskList) {
       int count = 0;
+      if (taskList.isEmpty) {
+        return count = 0;
+      }
       for (final eachList in taskList) {
         if (eachList[0]) {
           count++;
         }
       }
       return count;
+    }
+
+    String textToSentenceCase(String text) {
+      if (text.isEmpty) return text;
+      return text[0].toUpperCase() + text.substring(1);
+    }
+
+    void editTask(index, taskTitle) {
+      setState(() {
+        taskList[index][1] = taskTitle;
+      });
+      Navigator.pop(context);
+    }
+
+    void addTask() {
+      setState(() {
+        taskList.add([
+          false,
+          textToSentenceCase(_newTaskName.text),
+          DateFormat('MMM d: h: mma').format(DateTime.now())
+        ]);
+        _newTaskName.text = "";
+        Navigator.pop(context);
+      });
     }
 
     return Scaffold(
@@ -46,60 +75,16 @@ class _HomePageScreenState extends State<HomePageScreen> {
           ),
           onPressed: () {
             showDialog(
+                barrierDismissible: false,
                 context: context,
                 builder: (context) {
-                  return AlertDialog(
-                      content: Form(
-                    key: newFormKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextFormField(
-                          textAlign: TextAlign.center,
-                          decoration:
-                              const InputDecoration(hintText: "Task Title"),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Enter a Title";
-                            }
-                            newtaskName = value;
-                            return null;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text("Cancel")),
-                            ElevatedButton(
-                                onPressed: () {
-                                  if (newFormKey.currentState!.validate()) {
-                                    List newTask = [
-                                      false,
-                                      newtaskName,
-                                      formattedInputDate
-                                    ];
-                                    setState(() {
-                                      taskList.add(newTask);
-                                      Navigator.pop(context);
-                                    });
-                                    print(taskList);
-                                    print(newTask);
-                                  }
-                                },
-                                child: const Text("Save"))
-                          ],
-                        )
-                      ],
-                    ),
-                  ));
+                  return DialogWidget(
+                    onCancel: () {
+                      cancelNewTaskEntry(context, _newTaskName);
+                    },
+                    onSave: addTask,
+                    newTaskController: _newTaskName,
+                  );
                 });
           },
         ),
@@ -119,7 +104,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   Expanded(
                     child: Text(
                       //  "Hello, ${widget.username} 👋",
-                      "Hello, ${username} 👋",
+                      "Hello, $username 👋",
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                         fontSize: 28,
@@ -176,49 +161,47 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 child: ListView.builder(
                   itemCount: taskList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return TaskEntry(
-                        taskState: taskList[index][0],
-                        taskCat: taskCat,
-                        taskName: taskList[index][1]);
+                    return Dismissible(
+                      key: ValueKey(taskList[index]),
+                      onDismissed: (direction) {
+                        String itemName = taskList[index][1];
+                        taskList.removeAt(index);
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "$itemName was deleted",
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        print("${taskList.length} new delete");
+                      },
+                      // Optional background widget
+                      background: Container(
+                        color: Colors.red,
+                        child: Icon(Icons.delete),
+                      ),
+
+                      child: TaskEntry(
+                        taskInfo: taskList[index],
+                        taskIndex: taskList.indexOf(taskList[index]),
+                        onTaskToggle: (val) {
+                          print("${taskList[index][0]}");
+                          setState(() {
+                            taskList[index][0] = !taskList[index][0];
+                          });
+                        },
+                        editList: editTask,
+                      ),
+                    );
                   },
                 ),
               )
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class TaskEntry extends StatelessWidget {
-  const TaskEntry({
-    super.key,
-    required this.taskState,
-    required this.taskCat,
-    required this.taskName,
-  });
-
-  final bool taskState;
-  final String taskCat;
-  final String taskName;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      child: ListTile(
-        leading: Checkbox(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-          onChanged: (val) {},
-          value: taskState,
-        ),
-        subtitle: Text(taskCat,
-            style: const TextStyle(fontSize: 14, color: Colors.grey)),
-        title: Text(taskName,
-            style: const TextStyle(fontSize: 16, color: Colors.black)),
       ),
     );
   }
