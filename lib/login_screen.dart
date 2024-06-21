@@ -4,11 +4,22 @@ import 'package:todo/landing_page.dart';
 import 'package:todo/widgets/constants.dart';
 import 'package:todo/widgets/todo_button_widget.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({
     super.key,
   });
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool showPass = false;
+  final formKey = GlobalKey<FormState>();
+  bool inAgreement = false;
+  var name = "";
+  var email = "";
+  var password = "";
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
@@ -105,8 +116,17 @@ class LoginScreen extends StatelessWidget {
                         password = value;
                         return null;
                       },
-                      obscureText: true,
+                      obscureText: !showPass,
                       decoration: InputDecoration(
+                        suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                showPass = !showPass;
+                              });
+                            },
+                            child: showPass
+                                ? const Icon(Icons.remove_red_eye_outlined)
+                                : const Icon(Icons.remove_red_eye)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -134,14 +154,36 @@ class LoginScreen extends StatelessWidget {
                           style: TextStyle(fontSize: 17),
                         ),
                       ),
-                      Switch(value: false, onChanged: (val) {})
+                      Switch(
+                          activeColor: primaryColor.withOpacity(0.6),
+                          value: inAgreement,
+                          onChanged: (val) {
+                            setState(() {
+                              inAgreement = val;
+                            });
+                          })
                     ],
                   ),
                   ToDoButton(
                     title: "Login to Task App",
                     link: () {
-                      validateForm(
-                          context: context, key: formKey, username: name);
+                      if (inAgreement) {
+                        validateForm(
+                            context: context, key: formKey, username: name);
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  content: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    child: const Text(
+                                      "Kindly Agree with the KTodo Conditions",
+                                      style: TextStyle(fontSize: 20),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ));
+                      }
                     },
                     horizontalPadding: 0,
                   ),
