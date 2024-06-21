@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:todo/home_page_screen.dart';
 import 'package:todo/landing_page.dart';
 
 void main() {
@@ -33,6 +32,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const HomePageScreen();
+    return const LandingPageScreen();
   }
 }

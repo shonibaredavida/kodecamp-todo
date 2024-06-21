@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class NewTaskForm extends StatelessWidget {
   const NewTaskForm({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final newFormKey = GlobalKey<FormState>();
-    String formattedInputDate =
-        DateFormat('MMM d, HH:mm a').format(DateTime.now());
+
     String newtaskName = "";
     return Form(
       key: newFormKey,
@@ -40,7 +38,7 @@ class NewTaskForm extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {
                     if (newFormKey.currentState!.validate()) {
-                      print(newtaskName);
+                      //   print(newtaskName);
 
                       newFormKey.currentState!.save();
                     }
