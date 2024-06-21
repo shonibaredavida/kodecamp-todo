@@ -9,9 +9,9 @@ import 'package:todo/widgets/task_enty_widget.dart';
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({
     super.key,
-    //  required this.username,
+    required this.username,
   });
-  // final String username;
+  final String username;
 
   @override
   State<HomePageScreen> createState() => _HomePageScreenState();
@@ -23,7 +23,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String username = "David";
     String formattedDate = DateFormat.yMMMEd().format(DateTime.now());
 
     int getNumOfCompletedTask(List taskList) {
@@ -117,8 +116,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 children: [
                   Expanded(
                     child: Text(
-                      //  "Hello, ${widget.username} 👋",
-                      "Hello, $username 👋",
+                      "Hello, ${widget.username} 👋",
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                         fontSize: 28,
