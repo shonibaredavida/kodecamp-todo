@@ -64,11 +64,12 @@ class _HomePageScreenState extends State<HomePageScreen> {
     }
 
     return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(items: const [
+      bottomNavigationBar:
+          BottomNavigationBar(selectedItemColor: primaryColor, items: const [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
+          icon: Icon(Icons.add_home_outlined),
           label: "home",
-          activeIcon: Icon(Icons.home),
+          activeIcon: Icon(Icons.home_outlined),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.task_outlined),
