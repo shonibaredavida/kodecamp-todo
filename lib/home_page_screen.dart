@@ -23,12 +23,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< Updated upstream
-    String username = "David";
-    String taskCat = "Diseño de Onboarding";
-=======
-    // String username = "David";
->>>>>>> Stashed changes
     String formattedDate = DateFormat.yMMMEd().format(DateTime.now());
 
     int getNumOfCompletedTask(List taskList) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/functions/functions.dart';
+import 'package:todo/widgets/constants.dart';
 import 'package:todo/widgets/dialog_widget.dart';
 
 class TaskEntry extends StatefulWidget {

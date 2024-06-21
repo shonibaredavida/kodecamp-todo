@@ -280,11 +280,7 @@ void validateForm({context, key, username}) {
                   onPressed: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => HomePageScreen(
-<<<<<<< Updated upstream
-                            //   username: username,
-=======
                               username: username,
->>>>>>> Stashed changes
                             )));
                   },
                   child: const Text("Go to Task App ")),
