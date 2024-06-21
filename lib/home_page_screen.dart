@@ -24,7 +24,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
   @override
   Widget build(BuildContext context) {
     String username = "David";
-    String taskCat = "Diseño de Onboarding";
     String formattedDate = DateFormat.yMMMEd().format(DateTime.now());
 
     int getNumOfCompletedTask(List taskList) {
@@ -108,7 +107,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                         fontSize: 28,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -171,24 +170,24 @@ class _HomePageScreenState extends State<HomePageScreen> {
                           SnackBar(
                             content: Text(
                               "$itemName was deleted",
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                             ),
                             backgroundColor: Colors.red,
                           ),
                         );
-                        print("${taskList.length} new delete");
+                        //  print("${taskList.length} new delete");
                       },
                       // Optional background widget
                       background: Container(
                         color: Colors.red,
-                        child: Icon(Icons.delete),
+                        child: const Icon(Icons.delete),
                       ),
 
                       child: TaskEntry(
                         taskInfo: taskList[index],
                         taskIndex: taskList.indexOf(taskList[index]),
                         onTaskToggle: (val) {
-                          print("${taskList[index][0]}");
+                          //  print("${taskList[index][0]}");
                           setState(() {
                             taskList[index][0] = !taskList[index][0];
                           });

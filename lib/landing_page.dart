@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/login_screen.dart';
+import 'package:todo/widgets/constants.dart';
 import 'package:todo/widgets/todo_button_widget.dart';
 
 class LandingPageScreen extends StatelessWidget {
@@ -21,19 +22,35 @@ class LandingPageScreen extends StatelessWidget {
                 child: Image.asset("assets/signup.png"),
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
-              const Text(
-                "¡Te damos la bienvenida a Tasky!",
-                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: 'Stay on track \nwith',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                        text: ' KTodo',
+                        style: TextStyle(
+                            color: primaryColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 42)),
+                  ],
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
                 height: 20,
               ),
               const Text(
-                "Administra todos tus proyectos y tareas en un solo lugar.",
-                style: TextStyle(fontSize: 18),
+                "Never forget uncompleted tasks ",
+                style: TextStyle(fontSize: 20),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -49,10 +66,29 @@ class LandingPageScreen extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              const Text(
-                "Already have an account? Login",
-                textAlign: TextAlign.center,
-              )
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const LoginScreen()));
+                },
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: 'Already have an account? ',
+                        style: TextStyle(color: Colors.black, fontSize: 16),
+                      ),
+                      TextSpan(
+                          text: 'Login!',
+                          style: TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16)),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ],
           ),
         ),

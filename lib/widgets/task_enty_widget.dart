@@ -30,7 +30,7 @@ class _TaskEntryState extends State<TaskEntry> {
       child: ListTile(
         leading: Checkbox(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
           onChanged: widget.onTaskToggle,
           value: isCompleted,
         ),

@@ -11,36 +11,32 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-    var name = "";
-    var email = "";
-    var password = "";
     return Scaffold(
       body: SafeArea(
         child: Form(
             key: formKey,
             child: Container(
-              padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
               child: ListView(
                 children: [
                   const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.0),
+                    padding: EdgeInsets.symmetric(vertical: 12.0),
                     child: Text(
-                      "Crear una cuenta",
+                      "Can we know you?",
                       style:
                           TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   const Text(
                     "First Name",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   TextFormField(
                       validator: (value) {
@@ -59,13 +55,13 @@ class LoginScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       )),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 7),
                   const Text(
                     "Email",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   TextFormField(
                       validator: (value) {
@@ -86,14 +82,14 @@ class LoginScreen extends StatelessWidget {
                         ),
                       )),
                   const SizedBox(
-                    height: 40,
+                    height: 20,
                   ),
                   const Text(
                     "Password",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   TextFormField(
                       validator: (value) {
@@ -112,7 +108,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       )),
                   const SizedBox(
-                    height: 12,
+                    height: 6,
                   ),
                   Row(
                     children: const [
@@ -124,13 +120,13 @@ class LoginScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: 20,
                   ),
                   Row(
                     children: [
                       const Expanded(
                         child: Text(
-                          "Aceptar Términos y condiciones   ",
+                          "I agree with KTodo conditions",
                           style: TextStyle(fontSize: 17),
                         ),
                       ),
@@ -155,7 +151,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       const Text(
-                        " © rezistrate con ",
+                        " other Login channels ",
                         style: TextStyle(color: Colors.grey),
                       ),
                       Expanded(
@@ -167,7 +163,7 @@ class LoginScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 25,
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -196,7 +192,7 @@ class LoginScreen extends StatelessWidget {
                     height: 30,
                   ),
                   const Text(
-                    "Already have an account? Login",
+                    "Google Login... coming soon",
                     textAlign: TextAlign.center,
                   )
                 ],
@@ -226,7 +222,7 @@ void validateForm({context, key, username}) {
                       ElevatedButton.styleFrom(backgroundColor: primaryColor),
                   onPressed: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => HomePageScreen(
+                        builder: (context) => const HomePageScreen(
                             //   username: username,
                             )));
                   },
