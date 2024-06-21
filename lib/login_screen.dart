@@ -15,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool showPass = false;
+  bool passChecker = false;
   final formKey = GlobalKey<FormState>();
   bool inAgreement = false;
   final nameController = TextEditingController();
@@ -52,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextFormField(
                       controller: nameController,
                       validator: (value) {
+                        //  validateUsername(value);
                         if (value == null ||
                             value.isEmpty ||
                             value.trim().length <= 1 ||
@@ -88,8 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return 'Please enter a valid email address';
                         }
 
-                        //   print(emailController.text + "newnam10101");
-                        return null; // Return null if the input is valid
+                        return null;
                       },
                       decoration: InputDecoration(
                         //  label: const Text('Name'),
@@ -110,13 +111,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextFormField(
                       controller: passwordController,
                       validator: (value) {
+                        //  validatepassword(value);
                         if (value == null ||
                             value.isEmpty ||
                             value.trim().length < 8) {
                           return "Password Contain atleast 8 characters";
                         }
-                        //  print(passwordController.text + "newnam10101");
                         return null;
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          if (value.length > 7) {
+                            passChecker = true;
+                          } else {
+                            passChecker = false;
+                          }
+                        });
                       },
                       obscureText: !showPass,
                       decoration: InputDecoration(
@@ -137,11 +147,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 6,
                   ),
                   Row(
-                    children: const [
-                      Icon(Icons.check_circle),
-                      Text(
+                    children: [
+                      Icon(
+                        Icons.check_circle,
+                        size: 17,
+                        color: passChecker ? Colors.green : Colors.red,
+                      ),
+                      const Text(
                         " Should Contain atleast 8 characters.",
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 12),
                       )
                     ],
                   ),
@@ -153,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Expanded(
                         child: Text(
                           "I agree with KTodo conditions",
-                          style: TextStyle(fontSize: 17),
+                          style: TextStyle(fontSize: 12),
                         ),
                       ),
                       Switch(
