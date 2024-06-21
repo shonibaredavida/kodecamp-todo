@@ -4,6 +4,7 @@ import 'package:todo/functions/functions.dart';
 import 'package:todo/widgets/constants.dart';
 import 'package:todo/widgets/dialog_widget.dart';
 import 'package:todo/widgets/home_card_widget.dart';
+import 'package:todo/widgets/overlay_icon_widget.dart';
 import 'package:todo/widgets/task_enty_widget.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -62,6 +63,84 @@ class _HomePageScreenState extends State<HomePageScreen> {
       });
     }
 
+    void showScreenDialog(BuildContext context) {
+      showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel:
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        barrierColor: const Color.fromARGB(137, 200, 197, 197),
+        transitionDuration: const Duration(milliseconds: 220),
+        pageBuilder: (BuildContext context, Animation animation,
+            Animation secondaryAnimation) {
+          return Scaffold(
+            backgroundColor: Colors.black87.withOpacity(0.04),
+            body: Stack(
+              children: [
+                //cancel dialog screen
+
+                Positioned(
+                    bottom: 230,
+                    right: 0,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 30.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return DialogWidget(
+                                  onCancel: () {
+                                    cancelNewTaskEntry(context, _newTaskName);
+                                  },
+                                  onSave: addTask,
+                                  newTaskController: _newTaskName,
+                                );
+                              });
+                        },
+                        child: const OverlayIcon(
+                          text: 'Create Task',
+                          icons: Icons.check_circle_outline_rounded,
+                        ),
+                      ),
+                    )),
+                Positioned(
+                  bottom: 120,
+                  right: 0,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 36.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Icon(
+                        Icons.cancel_outlined,
+                        size: 30,
+                        color: Color.fromARGB(255, 38, 37, 37),
+                      ),
+                    ),
+                  ),
+                ),
+                const Positioned(
+                  bottom: 160,
+                  right: 0,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 30.0),
+                    child: OverlayIcon(
+                      text: 'Create Project',
+                      icons: Icons.note_add_outlined,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
     return Scaffold(
       bottomNavigationBar:
           BottomNavigationBar(selectedItemColor: primaryColor, items: const [
@@ -89,7 +168,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
           color: primaryColor,
         ),
         onPressed: () {
-          showDialog(
+          showScreenDialog(context);
+          /*   showDialog(
               barrierDismissible: false,
               context: context,
               builder: (context) {
@@ -100,7 +180,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   onSave: addTask,
                   newTaskController: _newTaskName,
                 );
-              });
+              }); */
         },
       ),
       body: SafeArea(
