@@ -17,9 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
   bool showPass = false;
   final formKey = GlobalKey<FormState>();
   bool inAgreement = false;
-  var name = "";
-  var email = "";
-  var password = "";
+  final nameController = TextEditingController();
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
@@ -54,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                      controller: nameController,
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
@@ -61,7 +62,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             value.trim().length > 10) {
                           return "Must have more than 2 characters ";
                         }
-                        name = value;
+
+                        //  print(nameController.text + "newnam10101");
                         return null;
                       },
                       maxLength: 10,
@@ -79,6 +81,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter an email address';
@@ -87,7 +91,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             .hasMatch(value)) {
                           return 'Please enter a valid email address';
                         }
-                        email = value;
+
+                        //   print(emailController.text + "newnam10101");
                         return null; // Return null if the input is valid
                       },
                       decoration: InputDecoration(
@@ -107,13 +112,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                      controller: passwordController,
                       validator: (value) {
                         if (value == null ||
                             value.isEmpty ||
                             value.trim().length < 8) {
                           return "Password Contain atleast 8 characters";
                         }
-                        password = value;
+                        //  print(passwordController.text + "newnam10101");
                         return null;
                       },
                       obscureText: !showPass,
@@ -168,21 +174,26 @@ class _LoginScreenState extends State<LoginScreen> {
                     title: "Login to Task App",
                     link: () {
                       if (inAgreement) {
+                        //  print(name + "newnam10101 byr");
+
                         validateForm(
-                            context: context, key: formKey, username: name);
+                            context: context,
+                            key: formKey,
+                            username: nameController.text);
                       } else {
                         showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                                  content: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    child: const Text(
-                                      "Kindly Agree with the KTodo Conditions",
-                                      style: TextStyle(fontSize: 20),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ));
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            content: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: const Text(
+                                "Kindly Agree with the KTodo Conditions",
+                                style: TextStyle(fontSize: 20),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        );
                       }
                     },
                     horizontalPadding: 0,
@@ -269,7 +280,11 @@ void validateForm({context, key, username}) {
                   onPressed: () {
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => HomePageScreen(
+<<<<<<< Updated upstream
                             //   username: username,
+=======
+                              username: username,
+>>>>>>> Stashed changes
                             )));
                   },
                   child: const Text("Go to Task App ")),
@@ -285,5 +300,6 @@ void validateForm({context, key, username}) {
             ],
           );
         });
+    key.currentState!.save();
   }
 }

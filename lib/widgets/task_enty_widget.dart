@@ -23,16 +23,17 @@ class _TaskEntryState extends State<TaskEntry> {
 
   @override
   Widget build(BuildContext context) {
-    bool isCompleted = false;
+    //  bool isCompleted = false;
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: ListTile(
         leading: Checkbox(
+          activeColor: primaryColor,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
           onChanged: widget.onTaskToggle,
-          value: isCompleted,
+          value: widget.taskInfo[0],
         ),
         trailing: IconButton(
             onPressed: () {
