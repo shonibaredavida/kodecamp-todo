@@ -64,29 +64,44 @@ class _HomePageScreenState extends State<HomePageScreen> {
     }
 
     return Scaffold(
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: IconButton(
-          icon: Icon(
-            Icons.add_circle,
-            size: 50,
-            color: primaryColor,
-          ),
-          onPressed: () {
-            showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) {
-                  return DialogWidget(
-                    onCancel: () {
-                      cancelNewTaskEntry(context, _newTaskName);
-                    },
-                    onSave: addTask,
-                    newTaskController: _newTaskName,
-                  );
-                });
-          },
+      bottomNavigationBar: BottomNavigationBar(items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_outlined),
+          label: "home",
+          activeIcon: Icon(Icons.home),
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.task_outlined),
+          label: "Tasks",
+          activeIcon: Icon(Icons.task),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.menu),
+          label: "Menu ",
+          activeIcon: Icon(Icons.menu_open_sharp),
+        ),
+      ]),
+      floatingActionButton: IconButton(
+        iconSize: 60,
+        icon: Icon(
+          Icons.add_circle,
+          //size: 40,
+          color: primaryColor,
+        ),
+        onPressed: () {
+          showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) {
+                return DialogWidget(
+                  onCancel: () {
+                    cancelNewTaskEntry(context, _newTaskName);
+                  },
+                  onSave: addTask,
+                  newTaskController: _newTaskName,
+                );
+              });
+        },
       ),
       body: SafeArea(
         child: Container(
