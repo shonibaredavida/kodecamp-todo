@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:todo/login_screen.dart';
-import 'package:todo/widgets/constants.dart';
+import 'package:todo/utils/constants/colors.dart';
+import 'package:todo/utils/constants/images.dart';
+import 'package:todo/utils/constants/sizes.dart';
 import 'package:todo/widgets/todo_button_widget.dart';
 
 class LandingPageScreen extends StatelessWidget {
@@ -19,10 +22,10 @@ class LandingPageScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: Image.asset("assets/signup.png"),
+                child: Image.asset(AppImages.loginPix),
               ),
               const SizedBox(
-                height: 10,
+                height: AppSizes.mds,
               ),
               Text.rich(
                 TextSpan(
@@ -31,7 +34,7 @@ class LandingPageScreen extends StatelessWidget {
                       text: 'Stay on track \nwith',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 40,
+                        fontSize: 3 * AppSizes.fontSizeMs,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -40,13 +43,13 @@ class LandingPageScreen extends StatelessWidget {
                         style: TextStyle(
                             color: primaryColor,
                             fontWeight: FontWeight.bold,
-                            fontSize: 42)),
+                            fontSize: 3 * AppSizes.fontSizeMs)),
                   ],
                 ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
-                height: 20,
+                height: AppSizes.spaceBtwItems,
               ),
               const Text(
                 "Never forget uncompleted tasks ",
@@ -54,23 +57,19 @@ class LandingPageScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
-                height: 30,
+                height: AppSizes.spaceBtwSectionsSm,
               ),
               ToDoButton(
                 title: 'Login',
                 link: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const LoginScreen()));
+                  Get.to(const LoginScreen());
                 },
               ),
               const SizedBox(
-                height: 30,
+                height: AppSizes.spaceBtwSectionsSm,
               ),
               GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const LoginScreen()));
-                },
+                onTap: () {},
                 child: Text.rich(
                   TextSpan(
                     children: [
@@ -83,7 +82,7 @@ class LandingPageScreen extends StatelessWidget {
                           style: TextStyle(
                               color: primaryColor,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16)),
+                              fontSize: AppSizes.fontSizeMd)),
                     ],
                   ),
                   textAlign: TextAlign.center,

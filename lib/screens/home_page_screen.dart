@@ -1,78 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:todo/functions/functions.dart';
-import 'package:todo/widgets/constants.dart';
+import 'package:todo/controllers/todo_controller.dart';
+import 'package:todo/utils/constants/colors.dart';
+import 'package:todo/utils/constants/sizes.dart';
 import 'package:todo/widgets/dialog_widget.dart';
 import 'package:todo/widgets/home_card_widget.dart';
 import 'package:todo/widgets/overlay_icon_widget.dart';
 import 'package:todo/widgets/task_enty_widget.dart';
 
-class HomePageScreen extends StatefulWidget {
+class HomePageScreen extends StatelessWidget {
   const HomePageScreen({
     super.key,
     required this.username,
   });
   final String username;
 
-  @override
-  State<HomePageScreen> createState() => _HomePageScreenState();
-}
-
-class _HomePageScreenState extends State<HomePageScreen> {
-  List taskList = [];
-  final _newTaskName = TextEditingController();
+  //List taskList = [];
 
   @override
   Widget build(BuildContext context) {
+    var controller = Get.put(TodoController());
     String formattedDate = DateFormat.yMMMEd().format(DateTime.now());
 
-    int getNumOfCompletedTask(List taskList) {
-      int count = 0;
-      if (taskList.isEmpty) {
-        return count = 0;
-      }
-      for (final eachList in taskList) {
-        if (eachList[0]) {
-          count++;
-        }
-      }
-      return count;
-    }
-
-    String textToSentenceCase(String text) {
-      if (text.isEmpty) return text;
-      return text[0].toUpperCase() + text.substring(1);
-    }
-
-    void editTask(index, taskTitle) {
-      setState(() {
-        taskList[index][1] = taskTitle;
-      });
-      Navigator.pop(context);
-    }
-
-    void addTask() {
-      setState(() {
-        taskList.add([
-          false,
-          textToSentenceCase(_newTaskName.text),
-          DateFormat('MMM d: h: mma').format(DateTime.now())
-        ]);
-        _newTaskName.text = "";
-        Navigator.pop(context);
-      });
-    }
-
-    void showScreenDialog(BuildContext context) {
-      showGeneralDialog(
-        context: context,
+    void showScreenDialog() {
+      Get.generalDialog(
         barrierDismissible: true,
         barrierLabel:
             MaterialLocalizations.of(context).modalBarrierDismissLabel,
         barrierColor: const Color.fromARGB(137, 200, 197, 197),
         transitionDuration: const Duration(milliseconds: 220),
-        pageBuilder: (BuildContext context, Animation animation,
-            Animation secondaryAnimation) {
+        pageBuilder:
+            (context, Animation animation, Animation secondaryAnimation) {
           return Scaffold(
             backgroundColor: Colors.black87.withOpacity(0.04),
             body: Stack(
@@ -83,22 +42,14 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     bottom: 230,
                     right: 0,
                     child: Padding(
-                      padding: EdgeInsets.only(right: 30.0),
+                      padding: const EdgeInsets.only(right: 30.0),
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pop();
-                          showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return DialogWidget(
-                                  onCancel: () {
-                                    cancelNewTaskEntry(context, _newTaskName);
-                                  },
-                                  onSave: addTask,
-                                  newTaskController: _newTaskName,
-                                );
-                              });
+                          Get.back();
+                          Get.dialog(
+                            DialogWidget(),
+                            barrierDismissible: false,
+                          );
                         },
                         child: const OverlayIcon(
                           text: 'Create Task',
@@ -110,10 +61,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   bottom: 120,
                   right: 0,
                   child: Padding(
-                    padding: EdgeInsets.only(right: 36.0),
+                    padding: const EdgeInsets.only(right: 36.0),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pop();
+                        Get.back();
                       },
                       child: const Icon(
                         Icons.cancel_outlined,
@@ -168,7 +119,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
           color: primaryColor,
         ),
         onPressed: () {
-          showScreenDialog(context);
+          showScreenDialog();
           /*   showDialog(
               barrierDismissible: false,
               context: context,
@@ -193,11 +144,12 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 formattedDate,
                 textAlign: TextAlign.left,
               ),
+              //hello text
               Row(
                 children: [
                   Expanded(
                     child: Text(
-                      "Hello, ${widget.username} 👋",
+                      "Hello, ${username} 👋",
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                         fontSize: 28,
@@ -210,36 +162,41 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     size: 34,
                   ),
                   const SizedBox(
-                    width: 15,
+                    width: AppSizes.spaceBtwInputFields,
                   ),
                   const Icon(
                     Icons.notifications_none,
-                    size: 34,
+                    size: AppSizes.spaceBtwSectionsSm,
                   ),
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    HomeCard(
-                        requiredIcon: const Icon(Icons.list_sharp),
-                        cardTitle: "Total Task",
-                        cardValue: taskList.length.toString()),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    HomeCard(
-                        requiredIcon:
-                            const Icon(Icons.playlist_add_check_rounded),
-                        cardTitle: "Task Completed ",
-                        cardValue: getNumOfCompletedTask(taskList).toString()),
-                  ],
-                ),
+                child: GetX<TodoController>(builder: (controller) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      HomeCard(
+                          requiredIcon: const Icon(Icons.list_sharp),
+                          cardTitle: "Total Task",
+                          cardValue: controller.taskList.length.toString()),
+                      const SizedBox(
+                        width: AppSizes.defaultSpace,
+                      ),
+                      HomeCard(
+                          requiredIcon:
+                              const Icon(Icons.playlist_add_check_rounded),
+                          cardTitle: "Task Completed ",
+                          cardValue: controller
+                              .getNumOfCompletedTask(controller.taskList)
+                              .toString()),
+                    ],
+                  );
+                }),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
+                //listview of task
                 child: Row(
                   children: const [
                     CircleAvatar(
@@ -251,46 +208,43 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: taskList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Dismissible(
-                      key: ValueKey(taskList[index]),
-                      onDismissed: (direction) {
-                        String itemName = taskList[index][1];
-                        taskList.removeAt(index);
-                        ScaffoldMessenger.of(context).clearSnackBars();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              "$itemName was deleted",
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            backgroundColor: Colors.red,
-                          ),
-                        );
-                        //  print("${taskList.length} new delete");
-                      },
-                      // Optional background widget
-                      background: Container(
-                        color: Colors.red,
-                        child: const Icon(Icons.delete),
-                      ),
+                child: GetX<TodoController>(builder: (controller) {
+                  return ListView.builder(
+                    itemCount: controller.taskList.length,
+                    itemBuilder: (context, int index) {
+                      return Dismissible(
+                        key: ValueKey(controller.taskList[index]),
+                        onDismissed: (direction) {
+                          String itemName = controller.taskList[index][1];
+                          controller.taskList.removeAt(index);
 
-                      child: TaskEntry(
-                        taskInfo: taskList[index],
-                        taskIndex: taskList.indexOf(taskList[index]),
-                        onTaskToggle: (val) {
-                          //  print("${taskList[index][0]}");
-                          setState(() {
-                            taskList[index][0] = !taskList[index][0];
-                          });
+                          Get.showSnackbar(GetSnackBar(
+                            title: "",
+                            message: "$itemName was deleted",
+                          ));
+                          //   ScaffoldMessenger.of(context).clearSnackBars();
+
+                          /*  ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "$itemName was deleted",
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          ); */
+                          //  print("${taskList.length} new delete");
                         },
-                        editList: editTask,
-                      ),
-                    );
-                  },
-                ),
+                        // Optional background widget
+                        background: Container(
+                          color: Colors.red,
+                          child: const Icon(Icons.delete),
+                        ),
+                        child: TaskEntry(taskIndex: index),
+                      );
+                    },
+                  );
+                }),
               )
             ],
           ),
