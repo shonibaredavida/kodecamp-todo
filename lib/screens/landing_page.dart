@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todo/login_screen.dart';
+import 'package:todo/screens/login_screen.dart';
 import 'package:todo/utils/constants/colors.dart';
 import 'package:todo/utils/constants/images.dart';
 import 'package:todo/utils/constants/sizes.dart';

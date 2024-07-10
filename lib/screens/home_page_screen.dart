@@ -20,8 +20,9 @@ class HomePageScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(TodoController());
+    final TodoController controller = Get.put(TodoController());
     String formattedDate = DateFormat.yMMMEd().format(DateTime.now());
+    controller.username = username;
 
     void showScreenDialog() {
       Get.generalDialog(
@@ -47,7 +48,7 @@ class HomePageScreen extends StatelessWidget {
                         onTap: () {
                           Get.back();
                           Get.dialog(
-                            DialogWidget(),
+                            const DialogWidget(),
                             barrierDismissible: false,
                           );
                         },
@@ -172,7 +173,7 @@ class HomePageScreen extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20),
-                child: GetX<TodoController>(builder: (controller) {
+                child: GetX<TodoController>(builder: (todoController) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -188,7 +189,7 @@ class HomePageScreen extends StatelessWidget {
                               const Icon(Icons.playlist_add_check_rounded),
                           cardTitle: "Task Completed ",
                           cardValue: controller
-                              .getNumOfCompletedTask(controller.taskList)
+                              .getNumOfCompletedTask(controller.toggleStates)
                               .toString()),
                     ],
                   );
@@ -208,42 +209,40 @@ class HomePageScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: GetX<TodoController>(builder: (controller) {
-                  return ListView.builder(
-                    itemCount: controller.taskList.length,
-                    itemBuilder: (context, int index) {
-                      return Dismissible(
-                        key: ValueKey(controller.taskList[index]),
-                        onDismissed: (direction) {
-                          String itemName = controller.taskList[index][1];
-                          controller.taskList.removeAt(index);
+                child: GetX<TodoController>(builder: (todoController) {
+                  return todoController.taskList.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: todoController.taskList.length,
+                          itemBuilder: (context, int index) {
+                            return Dismissible(
+                              key: ValueKey(todoController.taskList[index]),
+                              onDismissed: (direction) {
+                                String itemName =
+                                    todoController.taskList[index][1];
+                                todoController.taskList.removeAt(index);
+                                todoController.toggleStates.removeAt(index);
 
-                          Get.showSnackbar(GetSnackBar(
-                            title: "",
-                            message: "$itemName was deleted",
-                          ));
-                          //   ScaffoldMessenger.of(context).clearSnackBars();
-
-                          /*  ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                "$itemName was deleted",
-                                style: const TextStyle(fontSize: 16),
+                                Get.showSnackbar(
+                                  GetSnackBar(
+                                    title: "",
+                                    message: "$itemName was deleted",
+                                  ),
+                                );
+                              },
+                              background: Container(
+                                color: Colors.red,
+                                child: const Icon(Icons.delete),
                               ),
-                              backgroundColor: Colors.red,
-                            ),
-                          ); */
-                          //  print("${taskList.length} new delete");
-                        },
-                        // Optional background widget
-                        background: Container(
-                          color: Colors.red,
-                          child: const Icon(Icons.delete),
-                        ),
-                        child: TaskEntry(taskIndex: index),
-                      );
-                    },
-                  );
+                              child: TaskEntry(taskIndex: index),
+                            );
+                          },
+                        )
+                      : const Center(
+                          child: Text(
+                            "No Task Added",
+                            style: TextStyle(fontSize: AppSizes.fontSizeMd),
+                          ),
+                        );
                 }),
               )
             ],

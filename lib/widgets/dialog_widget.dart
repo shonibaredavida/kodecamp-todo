@@ -4,26 +4,24 @@ import 'package:todo/controllers/todo_controller.dart';
 import 'package:todo/utils/constants/colors.dart';
 import 'package:todo/utils/constants/sizes.dart';
 
-class DialogWidget extends StatefulWidget {
+class DialogWidget extends StatelessWidget {
   const DialogWidget({
     super.key,
-    this.edit = false,
-    this.task,
     this.taskIndex,
   });
-  final bool edit;
-  final List? task;
   final int? taskIndex;
-  @override
-  State<DialogWidget> createState() => _DialogWidgetState();
-}
-
-class _DialogWidgetState extends State<DialogWidget> {
-  bool showError = false;
+  /* bool showError = false; */
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(TodoController());
+    final TodoController controller = Get.find();
+    final titleTxt =
+        taskIndex == null ? "" : controller.taskList[taskIndex!][1];
+
+    final descTxt = taskIndex == null ? "" : controller.taskList[taskIndex!][2];
+    TextEditingController titleController =
+        TextEditingController(text: titleTxt);
+    TextEditingController descController = TextEditingController(text: descTxt);
     return AlertDialog(
         content: Padding(
       padding: const EdgeInsets.only(top: 10.0),
@@ -32,79 +30,76 @@ class _DialogWidgetState extends State<DialogWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          widget.edit
+          taskIndex != null
               ? const Text(
-                  "Edit the Task Title",
+                  "Modify Task",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 )
-              : Container(),
-          SizedBox(
-            height: widget.edit ? AppSizes.spaceBtwItems : 0,
+              : const Text(
+                  "Create New Task",
+                  style: TextStyle(
+                      fontSize: AppSizes.fontSizeLg,
+                      fontWeight: FontWeight.bold),
+                ),
+          const SizedBox(
+            height: AppSizes.spaceBtwItemsSm,
           ),
           TextFormField(
-            controller: widget.edit
-                ? controller.editTitleController
-                : controller.titleController,
+            controller: titleController,
             textAlign: TextAlign.center,
             decoration: InputDecoration(
-                hintText: "Task Title",
+                hintText: "Title",
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
           ),
           const SizedBox(
             height: AppSizes.spaceBtwInputFields,
           ),
+          TextFormField(
+            controller: descController,
+            textAlign: TextAlign.center,
+            decoration: InputDecoration(
+                hintText: "Description",
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
+          ),
+          /*     const SizedBox(
+            height: AppSizes.spaceBtwInputFields,
+          ),
           showError
-              ? const Padding(
-                  padding: EdgeInsets.only(bottom: AppSizes.sm),
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: AppSizes.sm),
                   child: Text(
                     "Title must be more than 3 characters",
-                    style: TextStyle(color: Colors.red, fontSize: 14),
+                    style: TextStyle(color: errorRed, fontSize: 14),
                   ),
                 )
-              : Container(),
+              : Container(), */
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              widget.edit
-                  ? ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18))),
-                      onPressed: () {
-                        if (controller.editTitleController.text.length < 4) {
-                          //   setState(() {
-                          showError = true;
-                          // });
-                          return;
-                        }
-                        controller.editTask(controller.editTitleController.text,
-                            widget.taskIndex);
-                      },
-                      child: const Text("Save"),
-                    )
-                  : ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18)),
-                      ),
-                      onPressed: () {
-                        if (controller.titleController.text.length < 4) {
-                          //   setState(() {
-                          showError = true;
-                          // });
-                          return;
-                        }
-
-                        controller.addTask(controller.titleController.text);
-                      },
-                      child: const Text("Save"),
-                    ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: primaryColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18))),
+                onPressed: () {
+                  /*     if (titleController.text.length < 4) {
+                    //   setState(() {
+                    showError = true;
+                    // });
+                    return;
+                  } */
+                  taskIndex != null
+                      ? controller.editTask(
+                          titleController, descController, taskIndex)
+                      : controller.addTask(descController, titleController);
+                },
+                child: Text(taskIndex == null ? "Save" : "Update"),
+              ),
               TextButton(
                 onPressed: () {
-                  controller.cancelNewTaskEntry(controller.titleController);
+                  Get.back();
                 },
                 child: Text(
                   "Cancel",

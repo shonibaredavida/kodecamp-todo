@@ -53,7 +53,7 @@ class LoginController extends GetxController {
                         ElevatedButton.styleFrom(backgroundColor: primaryColor),
                     onPressed: () {
                       onCloseForm();
-                      Get.to(HomePageScreen(username: name));
+                      Get.to(HomePageScreen(username: username));
                     },
                     child: const Text("Go to Task App ")),
                 TextButton(

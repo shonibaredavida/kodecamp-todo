@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo/controllers/login_controller.dart';
-import 'package:todo/controllers/todo_controller.dart';
 import 'package:todo/utils/constants/colors.dart';
 import 'package:todo/utils/constants/sizes.dart';
 import 'package:todo/widgets/todo_button_widget.dart';
@@ -121,23 +120,19 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(
                     height: AppSizes.xs,
                   ),
-                  GetX<LoginController>(builder: (controller) {
-                    return Row(
-                      children: [
-                        Icon(
-                          Icons.check_circle,
-                          size: AppSizes.md,
-                          color: controller.passChecker.value
-                              ? Colors.green
-                              : Colors.red,
-                        ),
-                        const Text(
-                          " Should Contain atleast 8 characters.",
-                          style: TextStyle(fontSize: 12),
-                        )
-                      ],
-                    );
-                  }),
+                  /*  Row(
+                    children: [
+                      Icon(
+                        Icons.check_circle,
+                        size: AppSizes.md,
+                        color: controller.passChecker ? green : errorRed,
+                      ),
+                      const Text(
+                        " Should Contain atleast 8 characters.",
+                        style: TextStyle(fontSize: AppSizes.fontSizeSm),
+                      )
+                    ],
+                  ), */
                   const SizedBox(
                     height: AppSizes.spaceBtwItems,
                   ),
@@ -146,7 +141,7 @@ class LoginScreen extends StatelessWidget {
                       const Expanded(
                         child: Text(
                           "I agree with KTodo conditions",
-                          style: TextStyle(fontSize: 12),
+                          style: TextStyle(fontSize: AppSizes.fontSizeSm),
                         ),
                       ),
                       GetX<LoginController>(builder: (controller) {
@@ -172,17 +167,17 @@ class LoginScreen extends StatelessWidget {
                       Expanded(
                         child: Container(
                           height: 1,
-                          color: Colors.grey,
+                          color: greyLine,
                         ),
                       ),
-                      const Text(
+                      Text(
                         " other Login channels ",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: greyLine),
                       ),
                       Expanded(
                         child: Container(
                           height: 1,
-                          color: Colors.grey,
+                          color: greyLine,
                         ),
                       ),
                     ],
@@ -194,7 +189,7 @@ class LoginScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(40),
-                        border: Border.all(color: Colors.grey, width: 1.5)),
+                        border: Border.all(color: greyLine, width: 1.5)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
