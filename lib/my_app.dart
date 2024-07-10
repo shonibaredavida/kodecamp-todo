@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:todo/screens/home_page_screen.dart';
 import 'package:todo/screens/splash_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
       /*    home: HomePageScreen(
           username: "",
         ) */
-      home: SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 }

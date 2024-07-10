@@ -150,7 +150,7 @@ class HomePageScreen extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      "Hello, ${username} 👋",
+                      "Hello, $username 👋",
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                         fontSize: 28,
@@ -218,13 +218,14 @@ class HomePageScreen extends StatelessWidget {
                               key: ValueKey(todoController.taskList[index]),
                               onDismissed: (direction) {
                                 String itemName =
-                                    todoController.taskList[index][1];
+                                    todoController.taskList[index][0];
                                 todoController.taskList.removeAt(index);
                                 todoController.toggleStates.removeAt(index);
 
                                 Get.showSnackbar(
                                   GetSnackBar(
                                     title: "",
+                                    duration: const Duration(seconds: 3),
                                     message: "$itemName was deleted",
                                   ),
                                 );

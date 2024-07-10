@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo/controllers/todo_controller.dart';
+import 'package:todo/utils/constants/colors.dart';
 import 'package:todo/utils/constants/sizes.dart';
 import 'package:todo/widgets/dialog_widget.dart';
 
@@ -25,41 +26,47 @@ class TaskEntry extends StatelessWidget {
       child: ListTile(
         leading: Obx(() => Checkbox(
               value: controller.toggleStates[taskIndex],
+              activeColor: primaryColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(60),
+              ),
               onChanged: (val) => controller.toggleComplet(taskIndex),
             )),
-        title: Obx(() => Text(controller.taskList[taskIndex][1],
-            style: const TextStyle(fontSize: 16, color: Colors.black))),
-        subtitle: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        title: Obx(() => Text(
+              controller.taskList[taskIndex][0],
+              style: const TextStyle(fontSize: 16, color: Colors.black),
+              overflow: TextOverflow.ellipsis,
+            )),
+        subtitle: Obx(() => Text(
+              controller.taskList[taskIndex][1],
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+              overflow: TextOverflow.visible,
+            )),
+        trailing: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: Obx(() => Text(
-                    controller.taskList[taskIndex][2],
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
-                    overflow: TextOverflow.visible,
-                  )),
-            ),
-            const SizedBox(
-              width: AppSizes.spaceBtwSectionsSm,
-            ),
-            Text(controller.taskList[taskIndex][3],
+            Text(controller.taskList[taskIndex][2],
                 style: const TextStyle(fontSize: 14, color: Colors.grey)),
-          ],
-        ),
-        trailing: IconButton(
-          onPressed: () {
-            Get.dialog(
-              DialogWidget(
-                taskIndex: taskIndex,
+            const SizedBox(
+              width: 0.3 * AppSizes.spaceBtwSectionsSm,
+            ),
+            IconButton(
+              onPressed: () {
+                Get.dialog(
+                  DialogWidget(
+                    taskIndex: taskIndex,
+                  ),
+                  barrierDismissible: false,
+                );
+              },
+              icon: const Icon(
+                Icons.mode_edit_outlined,
+                size: 20,
               ),
-              barrierDismissible: false,
-            );
-          },
-          icon: const Icon(
-            Icons.mode_edit_outlined,
-            size: 20,
-          ),
+            ),
+          ],
         ),
       ),
     );
