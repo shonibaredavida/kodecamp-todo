@@ -218,8 +218,10 @@ class HomePageScreen extends StatelessWidget {
                               key: ValueKey(todoController.taskList[index]),
                               onDismissed: (direction) {
                                 String itemName =
-                                    todoController.taskList[index][0];
+                                    todoController.titleList[index];
                                 todoController.taskList.removeAt(index);
+                                todoController.titleList.removeAt(index);
+                                todoController.descList.removeAt(index);
                                 todoController.toggleStates.removeAt(index);
 
                                 Get.showSnackbar(

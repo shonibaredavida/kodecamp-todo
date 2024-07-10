@@ -9,8 +9,9 @@ class TodoController extends GetxController {
   // var todos = <Todo>[].obs;
   var username;
   List taskList = <List<dynamic>>[].obs;
-
   List toggleStates = [].obs;
+  List descList = [].obs;
+  List titleList = [].obs;
 
   String textToSentenceCase(String text) {
     if (text.isEmpty) return text;
@@ -39,11 +40,13 @@ class TodoController extends GetxController {
       TextEditingController titleController) {
     //   print(taskList.length);
     taskList.add([
+      DateFormat('yMd').format(DateTime.now()),
       textToSentenceCase(titleController.text),
       textToSentenceCase(descriptionController.text),
-      DateFormat('yMd').format(DateTime.now())
     ]);
     toggleStates.add(false);
+    titleList.add(textToSentenceCase(titleController.text));
+    descList.add(textToSentenceCase(descriptionController.text));
     //  print(taskList.length);
     //print(taskList);
     Get.back();
@@ -53,12 +56,16 @@ class TodoController extends GetxController {
   removeTask(taskList, index) {
     taskList.removeAt(index);
     toggleStates.removeAt(index);
+    titleList.removeAt(index);
+    descList.removeAt(index);
   }
 
   editTask(TextEditingController titleController,
       TextEditingController descController, index) {
-    taskList[index][0] = titleController.text;
-    taskList[index][1] = descController.text;
+    titleList[index] = titleController.text;
+    //  taskList[index][1] = descController.text;
+    descList[index] = descController.text;
+
     // print("...edit " + taskList[index].toString());
     Get.back();
     Get.off(() => HomePageScreen(username: username));
