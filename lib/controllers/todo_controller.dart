@@ -9,10 +9,6 @@ import 'package:todo/screens/home_page_screen.dart';
 class TodoController extends GetxController {
   var todoList = <Todo>[].obs;
   var username;
-  // List taskList = <List<dynamic>>[].obs;
-  List toggleStates = [].obs;
-  List descList = [].obs;
-  List titleList = [].obs;
 
   String textToSentenceCase(String text) {
     if (text.isEmpty) return text;
