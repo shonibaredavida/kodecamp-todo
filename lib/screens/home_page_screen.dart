@@ -121,18 +121,6 @@ class HomePageScreen extends StatelessWidget {
         ),
         onPressed: () {
           showScreenDialog();
-          /*   showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) {
-                return DialogWidget(
-                  onCancel: () {
-                    cancelNewTaskEntry(context, _newTaskName);
-                  },
-                  onSave: addTask,
-                  newTaskController: _newTaskName,
-                );
-              }); */
         },
       ),
       body: SafeArea(
@@ -145,7 +133,6 @@ class HomePageScreen extends StatelessWidget {
                 formattedDate,
                 textAlign: TextAlign.left,
               ),
-              //hello text
               Row(
                 children: [
                   Expanded(
@@ -180,7 +167,7 @@ class HomePageScreen extends StatelessWidget {
                       HomeCard(
                           requiredIcon: const Icon(Icons.list_sharp),
                           cardTitle: "Total Task",
-                          cardValue: controller.taskList.length.toString()),
+                          cardValue: controller.todoList.length.toString()),
                       const SizedBox(
                         width: AppSizes.defaultSpace,
                       ),
@@ -188,9 +175,8 @@ class HomePageScreen extends StatelessWidget {
                           requiredIcon:
                               const Icon(Icons.playlist_add_check_rounded),
                           cardTitle: "Task Completed ",
-                          cardValue: controller
-                              .getNumOfCompletedTask(controller.toggleStates)
-                              .toString()),
+                          cardValue:
+                              controller.getNumOfCompletedTask().toString()),
                     ],
                   );
                 }),
@@ -199,31 +185,28 @@ class HomePageScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 //listview of task
                 child: Row(
-                  children: const [
+                  children: [
                     CircleAvatar(
                       radius: 5,
-                      backgroundColor: Color.fromARGB(255, 80, 107, 196),
+                      backgroundColor: primaryColor.withOpacity(0.6),
                     ),
-                    Text(" List of Tasks", style: TextStyle(fontSize: 20)),
+                    const Text(" List of Tasks",
+                        style: TextStyle(fontSize: 20)),
                   ],
                 ),
               ),
               Expanded(
                 child: GetX<TodoController>(builder: (todoController) {
-                  return todoController.taskList.isNotEmpty
+                  return todoController.todoList.isNotEmpty
                       ? ListView.builder(
-                          itemCount: todoController.taskList.length,
+                          itemCount: todoController.todoList.length,
                           itemBuilder: (context, int index) {
                             return Dismissible(
-                              key: ValueKey(todoController.taskList[index]),
+                              key: ValueKey(todoController.todoList[index]),
                               onDismissed: (direction) {
                                 String itemName =
-                                    todoController.titleList[index];
-                                todoController.taskList.removeAt(index);
-                                todoController.titleList.removeAt(index);
-                                todoController.descList.removeAt(index);
-                                todoController.toggleStates.removeAt(index);
-
+                                    todoController.todoList[index].title;
+                                todoController.todoList.removeAt(index);
                                 Get.showSnackbar(
                                   GetSnackBar(
                                     title: "",

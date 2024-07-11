@@ -3,12 +3,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:todo/models/todo_model.dart';
 import 'package:todo/screens/home_page_screen.dart';
 
 class TodoController extends GetxController {
-  // var todos = <Todo>[].obs;
+  var todoList = <Todo>[].obs;
   var username;
-  List taskList = <List<dynamic>>[].obs;
+  // List taskList = <List<dynamic>>[].obs;
   List toggleStates = [].obs;
   List descList = [].obs;
   List titleList = [].obs;
@@ -18,18 +19,18 @@ class TodoController extends GetxController {
     return text[0].toUpperCase() + text.substring(1);
   }
 
-  void toggleComplet(int outerIndex) {
-    toggleStates[outerIndex] = !toggleStates[outerIndex];
-    update();
+  void toggleComplet(int taskIndex) {
+    todoList[taskIndex].completed = !todoList[taskIndex].completed;
+    todoList.refresh();
   }
 
-  int getNumOfCompletedTask(taskList) {
+  int getNumOfCompletedTask() {
     int count = 0;
-    if (toggleStates.isEmpty) {
+    if (todoList.isEmpty) {
       return count = 0;
     }
-    for (final eachList in toggleStates) {
-      if (eachList) {
+    for (final eachList in todoList) {
+      if (eachList.completed) {
         count++;
       }
     }
@@ -39,42 +40,38 @@ class TodoController extends GetxController {
   addTask(TextEditingController descriptionController,
       TextEditingController titleController) {
     //   print(taskList.length);
-    taskList.add([
-      DateFormat('yMd').format(DateTime.now()),
-      textToSentenceCase(titleController.text),
-      textToSentenceCase(descriptionController.text),
-    ]);
-    toggleStates.add(false);
-    titleList.add(textToSentenceCase(titleController.text));
-    descList.add(textToSentenceCase(descriptionController.text));
-    //  print(taskList.length);
-    //print(taskList);
+    todoList.add(Todo(
+      title: textToSentenceCase(titleController.text),
+      desc: textToSentenceCase(descriptionController.text),
+      completed: false,
+      dateCreated: DateFormat('yMd').format(DateTime.now()),
+    ));
+    // print(" " + todoList.length.toString());
+
     Get.back();
     Get.off(() => HomePageScreen(username: username));
   }
 
-  removeTask(taskList, index) {
-    taskList.removeAt(index);
-    toggleStates.removeAt(index);
-    titleList.removeAt(index);
-    descList.removeAt(index);
+  removeTask(index) {
+    todoList.removeAt(index);
   }
 
   editTask(TextEditingController titleController,
       TextEditingController descController, index) {
-    titleList[index] = titleController.text;
-    //  taskList[index][1] = descController.text;
-    descList[index] = descController.text;
+    todoList[index] = Todo(
+        title: titleController.text,
+        desc: descController.text,
+        completed: todoList[index].completed,
+        dateCreated: todoList[index].dateCreated);
 
-    // print("...edit " + taskList[index].toString());
     Get.back();
     Get.off(() => HomePageScreen(username: username));
   }
 
   dynamic numOfCompletedTask() {
-    if (taskList.isEmpty) {
+    if (todoList.isEmpty) {
       return 0;
     }
-    return taskList.length;
+    return todoList.length;
   }
 }

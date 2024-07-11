@@ -15,9 +15,11 @@ class DialogWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TodoController controller = Get.find();
-    final titleTxt = taskIndex == null ? "" : controller.titleList[taskIndex!];
+    final titleTxt =
+        taskIndex == null ? "" : controller.todoList[taskIndex!].title;
 
-    final descTxt = taskIndex == null ? "" : controller.descList[taskIndex!];
+    final descTxt =
+        taskIndex == null ? "" : controller.todoList[taskIndex!].desc;
     TextEditingController titleController =
         TextEditingController(text: titleTxt);
     TextEditingController descController = TextEditingController(text: descTxt);
