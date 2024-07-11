@@ -38,7 +38,6 @@ class LoginController extends GetxController {
 
   void validateForm({context, key, username}) {
     if (key.currentState!.validate()) {
-      //      print("n: $name e:  $email p: $password");
       showDialog(
           barrierDismissible: false,
           context: context,
@@ -54,7 +53,7 @@ class LoginController extends GetxController {
                     style:
                         ElevatedButton.styleFrom(backgroundColor: primaryColor),
                     onPressed: () {
-                      onCloseForm();
+                      //     onCloseForm();
                       Get.to(HomePageScreen(username: username));
                     },
                     child: const Text("Go to Task App ")),
@@ -99,11 +98,11 @@ class LoginController extends GetxController {
     }
   }
 
-  void onCloseForm() {
+/*   void onCloseForm() {
     emailController.dispose();
     passwordController.dispose();
     nameController.dispose();
-  }
+  } */
 
   String? validateName(String? value) {
     //  validateUsername(value);
