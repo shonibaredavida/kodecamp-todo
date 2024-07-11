@@ -72,6 +72,7 @@ class LoginController extends GetxController {
               ],
             );
           });
+
       key.currentState!.save();
     }
   }
@@ -119,16 +120,13 @@ class LoginController extends GetxController {
   }
 
   String? validateEmail(String? value) {
-    /*  if (!GetUtils.isEmail(value!)) {
-      return "Provide valid Email";
-    } */
-    if (value == null || value.isEmpty) {
-      return 'Please enter an email address';
-    } else if (!RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
-        .hasMatch(value)) {
-      return 'Please enter a valid email address';
+    if (value!.isNotEmpty) {
+      if (!GetUtils.isEmail(value)) {
+        return 'Please enter a valid Email address';
+      }
+    } else {
+      return "Kindly Enter a valid Email address";
     }
-
     return null;
   }
 

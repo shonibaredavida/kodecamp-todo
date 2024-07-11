@@ -25,7 +25,7 @@ class TaskEntry extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: ListTile(
         leading: Obx(() => Checkbox(
-              value: controller.toggleStates[taskIndex],
+              value: controller.todoList[taskIndex].completed,
               activeColor: primaryColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(60),
@@ -33,12 +33,12 @@ class TaskEntry extends StatelessWidget {
               onChanged: (val) => controller.toggleComplet(taskIndex),
             )),
         title: Obx(() => Text(
-              controller.titleList[taskIndex],
+              controller.todoList[taskIndex].title,
               style: const TextStyle(fontSize: 16, color: Colors.black),
               overflow: TextOverflow.ellipsis,
             )),
         subtitle: Obx(() => Text(
-              controller.descList[taskIndex],
+              controller.todoList[taskIndex].desc,
               style: const TextStyle(fontSize: 14, color: Colors.grey),
               overflow: TextOverflow.visible,
             )),
@@ -47,8 +47,10 @@ class TaskEntry extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(controller.taskList[taskIndex][0],
-                style: const TextStyle(fontSize: 14, color: Colors.grey)),
+            Text(
+              controller.todoList[taskIndex].dateCreated,
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
             const SizedBox(
               width: 0.3 * AppSizes.spaceBtwSectionsSm,
             ),
