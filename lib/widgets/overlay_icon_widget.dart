@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo/widgets/constants.dart';
+import 'package:todo/utils/constants/colors.dart';
+import 'package:todo/utils/constants/sizes.dart';
 
 class OverlayIcon extends StatelessWidget {
   const OverlayIcon({super.key, required this.text, required this.icons});
@@ -14,7 +15,7 @@ class OverlayIcon extends StatelessWidget {
         children: [
           Text(text),
           const SizedBox(
-            width: 8,
+            width: AppSizes.spaceBtwSectionsSm,
           ),
           CircleAvatar(
             backgroundColor: primaryColor,

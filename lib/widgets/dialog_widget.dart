@@ -1,36 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:todo/widgets/constants.dart';
+import 'package:get/get.dart';
+import 'package:todo/controllers/todo_controller.dart';
+import 'package:todo/utils/constants/colors.dart';
+import 'package:todo/utils/constants/sizes.dart';
 
-class DialogWidget extends StatefulWidget {
+class DialogWidget extends StatelessWidget {
   const DialogWidget({
     super.key,
-    required this.onSave,
-    required this.onCancel,
-    required this.newTaskController,
-    this.edit = false,
-    this.task,
+    this.taskIndex,
   });
-  final VoidCallback onSave, onCancel;
-  final bool edit;
-  final List? task;
-  final TextEditingController newTaskController;
-  @override
-  State<DialogWidget> createState() => _DialogWidgetState();
-}
-
-class _DialogWidgetState extends State<DialogWidget> {
-  bool showError = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.edit == true) {
-      widget.newTaskController.text = widget.task![1];
-    }
-  }
+  final int? taskIndex;
+  /* bool showError = false; */
 
   @override
   Widget build(BuildContext context) {
+    final TodoController controller = Get.find();
+    final titleTxt =
+        taskIndex == null ? "" : controller.todoList[taskIndex!].title;
+
+    final descTxt =
+        taskIndex == null ? "" : controller.todoList[taskIndex!].desc;
+    TextEditingController titleController =
+        TextEditingController(text: titleTxt);
+    TextEditingController descController = TextEditingController(text: descTxt);
     return AlertDialog(
         content: Padding(
       padding: const EdgeInsets.only(top: 10.0),
@@ -39,35 +31,51 @@ class _DialogWidgetState extends State<DialogWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          widget.edit
+          taskIndex != null
               ? const Text(
-                  "Edit the Task Title",
+                  "Modify Task",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 )
-              : Container(),
-          SizedBox(
-            height: widget.edit ? 15 : 0,
+              : const Text(
+                  "Create New Task",
+                  style: TextStyle(
+                      fontSize: AppSizes.fontSizeLg,
+                      fontWeight: FontWeight.bold),
+                ),
+          const SizedBox(
+            height: AppSizes.spaceBtwItemsSm,
           ),
           TextFormField(
-            controller: widget.newTaskController,
+            controller: titleController,
             textAlign: TextAlign.center,
             decoration: InputDecoration(
-                hintText: "Task Title",
+                hintText: "Title",
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
           ),
           const SizedBox(
-            height: 20,
+            height: AppSizes.spaceBtwInputFields,
+          ),
+          TextFormField(
+            controller: descController,
+            textAlign: TextAlign.center,
+            decoration: InputDecoration(
+                hintText: "Description",
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(8))),
+          ),
+          /*     const SizedBox(
+            height: AppSizes.spaceBtwInputFields,
           ),
           showError
-              ? const Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: AppSizes.sm),
                   child: Text(
                     "Title must be more than 3 characters",
-                    style: TextStyle(color: Colors.red, fontSize: 14),
+                    style: TextStyle(color: errorRed, fontSize: 14),
                   ),
                 )
-              : Container(),
+              : Container(), */
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -77,18 +85,23 @@ class _DialogWidgetState extends State<DialogWidget> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18))),
                 onPressed: () {
-                  if (widget.newTaskController.text.length < 4) {
-                    setState(() {
-                      showError = true;
-                    });
+                  /*     if (titleController.text.length < 4) {
+                    //   setState(() {
+                    showError = true;
+                    // });
                     return;
-                  }
-                  widget.onSave();
+                  } */
+                  taskIndex != null
+                      ? controller.editTask(
+                          titleController, descController, taskIndex)
+                      : controller.addTask(descController, titleController);
                 },
-                child: const Text("Save"),
+                child: Text(taskIndex == null ? "Save" : "Update"),
               ),
               TextButton(
-                onPressed: widget.onCancel,
+                onPressed: () {
+                  Get.back();
+                },
                 child: Text(
                   "Cancel",
                   style: TextStyle(color: primaryColor),
