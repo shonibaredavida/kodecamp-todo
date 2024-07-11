@@ -1,75 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:todo/controllers/todo_controller.dart';
-import 'package:todo/utils/constants/colors.dart';
-import 'package:todo/utils/constants/sizes.dart';
+import 'package:todo/functions/functions.dart';
+import 'package:todo/widgets/constants.dart';
 import 'package:todo/widgets/dialog_widget.dart';
 
-class TaskEntry extends StatelessWidget {
+class TaskEntry extends StatefulWidget {
   const TaskEntry({
     super.key,
+    required this.taskInfo,
+    required this.onTaskToggle,
     required this.taskIndex,
+    required this.editList,
   });
-
+  final void Function(dynamic, dynamic) editList;
+  final List taskInfo;
+  final void Function(bool?)? onTaskToggle;
   final int taskIndex;
+  @override
+  State<TaskEntry> createState() => _TaskEntryState();
+}
+
+class _TaskEntryState extends State<TaskEntry> {
+  var titleController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     //  bool isCompleted = false;
-
-    final controller = Get.put(TodoController());
-    //   var checkState = controller.taskList[taskIndex][0].obs;
-
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: ListTile(
-        leading: Obx(() => Checkbox(
-              value: controller.todoList[taskIndex].completed,
-              activeColor: primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(60),
-              ),
-              onChanged: (val) => controller.toggleComplet(taskIndex),
-            )),
-        title: Obx(() => Text(
-              controller.todoList[taskIndex].title,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
-              overflow: TextOverflow.ellipsis,
-            )),
-        subtitle: Obx(() => Text(
-              controller.todoList[taskIndex].desc,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
-              overflow: TextOverflow.visible,
-            )),
-        trailing: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              controller.todoList[taskIndex].dateCreated,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-            const SizedBox(
-              width: 0.3 * AppSizes.spaceBtwSectionsSm,
-            ),
-            IconButton(
-              onPressed: () {
-                Get.dialog(
-                  DialogWidget(
-                    taskIndex: taskIndex,
-                  ),
-                  barrierDismissible: false,
-                );
-              },
-              icon: const Icon(
-                Icons.mode_edit_outlined,
-                size: 20,
-              ),
-            ),
-          ],
+        leading: Checkbox(
+          activeColor: primaryColor,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(60)),
+          onChanged: widget.onTaskToggle,
+          value: widget.taskInfo[0],
         ),
+        trailing: IconButton(
+            onPressed: () {
+              showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    return DialogWidget(
+                      onCancel: () {
+                        cancelNewTaskEntry(context, titleController);
+                      },
+                      onSave: () {
+                        widget.editList(widget.taskIndex, titleController.text);
+                      },
+                      task: widget.taskInfo,
+                      newTaskController: titleController,
+                      edit: true,
+                    );
+                  });
+            },
+            icon: const Icon(
+              Icons.mode_edit_outlined,
+              size: 20,
+            )),
+        subtitle: Text(widget.taskInfo[2],
+            style: const TextStyle(fontSize: 14, color: Colors.grey)),
+        title: Text(widget.taskInfo[1],
+            style: const TextStyle(fontSize: 16, color: Colors.black)),
       ),
     );
   }
