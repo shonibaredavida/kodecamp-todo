@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo/controllers/todo_controller.dart';
+import 'package:todo/screens/todo_details_screen.dart';
 import 'package:todo/utils/constants/colors.dart';
 import 'package:todo/utils/constants/sizes.dart';
 import 'package:todo/widgets/dialog_widget.dart';
@@ -32,24 +33,42 @@ class TaskEntry extends StatelessWidget {
               ),
               onChanged: (val) => controller.toggleComplet(taskIndex),
             )),
-        title: Obx(() => Text(
-              controller.todoList[taskIndex].title,
-              style: const TextStyle(fontSize: 16, color: Colors.black),
-              overflow: TextOverflow.ellipsis,
-            )),
-        subtitle: Obx(() => Text(
-              controller.todoList[taskIndex].desc,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
-              overflow: TextOverflow.visible,
-            )),
+        title: GestureDetector(
+          child: Obx(() => Text(
+                controller.todoList[taskIndex].title,
+                style: const TextStyle(fontSize: 16, color: Colors.black),
+                overflow: TextOverflow.ellipsis,
+              )),
+          onTap: () {
+            Get.to(TaskDetailsScreen(taskIndex: taskIndex));
+            print("newdddddd");
+          },
+        ),
+        subtitle: GestureDetector(
+          child: Obx(() => Text(
+                controller.todoList[taskIndex].desc,
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
+                overflow: TextOverflow.visible,
+              )),
+          onTap: () {
+            print("newdddddd");
+            Get.to(TaskDetailsScreen(taskIndex: taskIndex));
+          },
+        ),
         trailing: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              controller.todoList[taskIndex].dateCreated,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            GestureDetector(
+              child: Text(
+                controller.todoList[taskIndex].dateCreated,
+                style: const TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+              onTap: () {
+                print("newdddddd");
+                Get.to(TaskDetailsScreen(taskIndex: taskIndex));
+              },
             ),
             const SizedBox(
               width: 0.3 * AppSizes.spaceBtwSectionsSm,

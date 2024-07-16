@@ -20,6 +20,22 @@ class TodoController extends GetxController {
     todoList.refresh();
   }
 
+  void showScreenDialog(Widget content, context) {
+    Get.generalDialog(
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: const Color.fromARGB(137, 200, 197, 197),
+      transitionDuration: const Duration(milliseconds: 220),
+      pageBuilder:
+          (context, Animation animation, Animation secondaryAnimation) {
+        return Scaffold(
+          backgroundColor: Colors.black87.withOpacity(0.04),
+          body: content,
+        );
+      },
+    );
+  }
+
   int getNumOfCompletedTask() {
     int count = 0;
     if (todoList.isEmpty) {

@@ -24,75 +24,6 @@ class HomePageScreen extends StatelessWidget {
     String formattedDate = DateFormat.yMMMEd().format(DateTime.now());
     controller.username = username;
 
-    void showScreenDialog() {
-      Get.generalDialog(
-        barrierDismissible: true,
-        barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        barrierColor: const Color.fromARGB(137, 200, 197, 197),
-        transitionDuration: const Duration(milliseconds: 220),
-        pageBuilder:
-            (context, Animation animation, Animation secondaryAnimation) {
-          return Scaffold(
-            backgroundColor: Colors.black87.withOpacity(0.04),
-            body: Stack(
-              children: [
-                //cancel dialog screen
-
-                Positioned(
-                    bottom: 230,
-                    right: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 30.0),
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.back();
-                          Get.dialog(
-                            const DialogWidget(),
-                            barrierDismissible: false,
-                          );
-                        },
-                        child: const OverlayIcon(
-                          text: 'Create Task',
-                          icons: Icons.check_circle_outline_rounded,
-                        ),
-                      ),
-                    )),
-                Positioned(
-                  bottom: 120,
-                  right: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 36.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: const Icon(
-                        Icons.cancel_outlined,
-                        size: 30,
-                        color: Color.fromARGB(255, 38, 37, 37),
-                      ),
-                    ),
-                  ),
-                ),
-                const Positioned(
-                  bottom: 160,
-                  right: 0,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 30.0),
-                    child: OverlayIcon(
-                      text: 'Create Project',
-                      icons: Icons.note_add_outlined,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-    }
-
     return Scaffold(
       bottomNavigationBar:
           BottomNavigationBar(selectedItemColor: primaryColor, items: const [
@@ -120,7 +51,8 @@ class HomePageScreen extends StatelessWidget {
           color: primaryColor,
         ),
         onPressed: () {
-          showScreenDialog();
+          controller.showScreenDialog(
+              const CreateTodoAndProjectStackWidget(), context);
         },
       ),
       body: SafeArea(
@@ -235,6 +167,69 @@ class HomePageScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CreateTodoAndProjectStackWidget extends StatelessWidget {
+  const CreateTodoAndProjectStackWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        //cancel dialog screen
+
+        Positioned(
+            bottom: 230,
+            right: 0,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 30.0),
+              child: GestureDetector(
+                onTap: () {
+                  Get.back();
+                  Get.dialog(
+                    const DialogWidget(),
+                    barrierDismissible: false,
+                  );
+                },
+                child: const OverlayIcon(
+                  text: 'Create Task',
+                  icons: Icons.check_circle_outline_rounded,
+                ),
+              ),
+            )),
+        Positioned(
+          bottom: 120,
+          right: 0,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 36.0),
+            child: GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: const Icon(
+                Icons.cancel_outlined,
+                size: 30,
+                color: Color.fromARGB(255, 38, 37, 37),
+              ),
+            ),
+          ),
+        ),
+        const Positioned(
+          bottom: 160,
+          right: 0,
+          child: Padding(
+            padding: EdgeInsets.only(right: 30.0),
+            child: OverlayIcon(
+              text: 'Create Project',
+              icons: Icons.note_add_outlined,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
